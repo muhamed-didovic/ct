@@ -15,7 +15,12 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        //
+        $products = json_decode(File::get(public_path('products.json')))?? [];
+    
+        $products = collect($products)->sortByDesc('submitted');
+    
+        $total = $products->sum('total');
+        return view('products.index', compact('products', 'total'));
     }
     
     /**
@@ -23,15 +28,15 @@ class ProductsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function list()
     {
         $products = json_decode(File::get(public_path('products.json')))?? [];
         
         $products = collect($products)->sortByDesc('submitted');
         
         $total = $products->sum('total');
-        
-        return view('products.create', compact('products', 'total'));
+        return response()->json(['products' => $products, 'total' => $total]);
+        //return view('products.create', compact('products', 'total'));
     }
     
     /**
@@ -59,7 +64,11 @@ class ProductsController extends Controller
         $fileName = 'products.json';
         File::put(public_path($fileName), $data);
     
-        return response()->json($data);
+        $products = json_decode(File::get(public_path('products.json')))?? [];
+        $products = collect($products)->sortByDesc('submitted');
+    
+        $total = $products->sum('total');
+        return response()->json(['products' => $products, 'total' => $total]);
     }
     
     /**

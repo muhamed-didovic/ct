@@ -17,23 +17,24 @@ window.Vue = require('vue');
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+
 });
 
 
-$(function () {
-    $(document).on('click', '.submit', e => {
-        e.preventDefault();
-        console.log('serialize', $('form').serialize());
-        $.ajax({
-            method: 'POST',
-            url: '/products',
-            data: $('form').serialize(),
-        })
-            .then(data => location.reload())
-            .catch((xhr, textStatus, errorThrown) => {
-                console.error('url:', url, 'args', arguments);
-                alert('textStatus');
-            });
-    });
-});
+// $(function () {
+//     $(document).on('click', '.submit', e => {
+//         e.preventDefault();
+//         console.log('serialize', $('form').serialize());
+//         $.ajax({
+//             method: 'POST',
+//             url: '/products',
+//             data: $('form').serialize(),
+//         })
+//             .then(data => location.reload())
+//             .catch((xhr, textStatus, errorThrown) => {
+//                 console.error('url:', url, 'args', arguments);
+//                 alert('textStatus');
+//             });
+//     });
+// });
