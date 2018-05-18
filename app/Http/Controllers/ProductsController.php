@@ -15,12 +15,13 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $products = json_decode(File::get(public_path('products.json')))?? [];
-    
-        $products = collect($products)->sortByDesc('submitted');
-    
-        $total = $products->sum('total');
-        return view('products.index', compact('products', 'total'));
+//        $products = json_decode(File::get(public_path('products.json'))) ?? [];
+//
+//        $products = collect($products)->sortByDesc('submitted');
+//
+//        $total = $products->sum('total');
+        
+        return view('products.index');//compact('products', 'total')
     }
     
     /**
@@ -30,11 +31,14 @@ class ProductsController extends Controller
      */
     public function list()
     {
-        $products = json_decode(File::get(public_path('products.json')))?? [];
+        $products = json_decode(File::get(public_path('products.json'))) ?? [];
         
         $products = collect($products)->sortByDesc('submitted');
         
+        //dd($products);
+        
         $total = $products->sum('total');
+        
         return response()->json(['products' => $products, 'total' => $total]);
         //return view('products.create', compact('products', 'total'));
     }
@@ -47,27 +51,37 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
+        
+        //dd(request('number'));
         $products = json_decode(File::get(public_path('products.json'))) ?? [];
         
+        //if there is index, remove that product and add as new one
+        if ($index = request('number')) {
+            $products = collect($products)->forget($index);
+        }
         $data = collect($products)->push(
             [
                 'name'      => request('name'),
-                'quantity' => request('quantity'),
+                'quantity'  => request('quantity'),
                 'price'     => request('price'),
                 'submitted' => time(),
                 'total'     => request('quantity') * request('price'),
             ]
-        )->toJson();
+        )
+            //->sortByDesc('submitted');
+        ;
+        
         
         //dd($data);
         
         $fileName = 'products.json';
-        File::put(public_path($fileName), $data);
-    
-        $products = json_decode(File::get(public_path('products.json')))?? [];
-        $products = collect($products)->sortByDesc('submitted');
-    
+        File::put(public_path($fileName), $data->toJson());
+        
+        //$products = json_decode(File::get(public_path('products.json')))?? [];
+        $products = $data->sortByDesc('submitted');
+        
         $total = $products->sum('total');
+        
         return response()->json(['products' => $products, 'total' => $total]);
     }
     

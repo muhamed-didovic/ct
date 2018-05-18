@@ -6,9 +6,18 @@
                     <div class="card-header">Products</div>
 
                     <div class="card-body">
-                        <form action="" @submit.prevent="onSchemaFormSubmit">
-                            <!--@csrf-->
+                        <form action="" @submit.prevent="productSubmit">
+                            <!--<div class="form-group row">-->
+                                <!--<label for="name" class="col-sm-4 col-form-label text-md-right">Product index</label>-->
 
+                                <!--<div class="col-md-6">-->
+                                    <!--<input id="number" type="text"-->
+                                           <!--class="form-control"-->
+                                           <!--v-model="form.number"-->
+                                           <!--name="number" required autofocus>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <input type="hidden" name="number" id="number" v-model="form.number">
                             <div class="form-group row">
                                 <label for="name" class="col-sm-4 col-form-label text-md-right">Product name</label>
 
@@ -52,12 +61,14 @@
                         </form>
                         <p>Total sum of all products is: {{(total > 0) ? total : 0}}</p>
                         <ul>
-                            <li v-for="product in products">
+                            <li v-for="(product, index) in products">
+                                <!--Index: {{index}} <br>-->
                                 Product Name: {{product.name}} <br>
                                 Quantity in stock: {{product.quantity}} <br>
                                 Price per item: {{product.price}} <br>
                                 Datetime submitted: {{product.submitted}} <br>
                                 Total value number: {{product.total}} <br>
+                                <button @click.prvent="editProduct(index, product)">Edit Product</button>
                                 <hr>
                             </li>
 
@@ -77,6 +88,7 @@
         data: function () {
             return {
                 form: {
+                    number: '',
                     name: '',
                     quantity: '',
                     price: '',
@@ -85,33 +97,52 @@
                 products: []
             };
         },
+        computed: {
+            sortedItems: function() {
+                return this.products.sort((a, b) => {
+                    if (Date.parse(a.submitted) > Date.parse(b.submitted)) {
+                        return 1
+                    } else if (Date.parse(a.submitted) < Date.parse(b.submitted)) {
+                        return -1
+                    } else {
+                        return 0
+                    }
+                })
+            }
+        },
         mounted() {
             axios.get('/list')
                 .then(response => {
-                    console.log('rrrrr', response.data);
-
-                    this.products = response.data.products
                     this.total = response.data.total
+                    let products =  Object.keys(response.data.products).map(i => response.data.products[i]);
+                    console.log('prod', _.orderBy(products, ['submitted'], [ 'desc']));
+                    this.products =  _.orderBy(products, ['submitted'], [ 'desc'])
 
                 })
                 .catch(err => console.log('Error from methods:', err));
         },
         methods: {
-            onSchemaFormSubmit() {
-                // const r =  _.reduce(this.data, (result, item , key) => {
-                //     console.log('res', result, 'key', key, 'item', item);
-                //     result[key] = item.value;
-                //     return result;
-                // }, {});
+            editProduct(index, product) {
+                this.form.number = index
+                this.form.name = product.name
+                this.form.quantity = product.quantity
+                this.form.price = product.price
+            },
+            productSubmit() {
                 console.log('2222', this.form);
                 axios.post('/products', this.form)
                     .then(response => {
                         console.log('response:', response);
-                        this.products = response.data.products
+
                         this.total = response.data.total
+                        this.form.number = ''
                         this.form.name = ''
                         this.form.quantity = ''
                         this.form.price = ''
+
+                        let products =  Object.keys(response.data.products).map(i => response.data.products[i]);
+                        console.log('prod', _.orderBy(products, ['submitted'], [ 'desc']));
+                        this.products =  _.orderBy(products, ['submitted'], [ 'desc'])
 
                     })
                     .catch(err => console.log('Error from methods:', err));
