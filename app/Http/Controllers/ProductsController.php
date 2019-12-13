@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
 class ProductsController extends Controller
+
 {
     /**
      * Display a listing of the resource.
@@ -14,16 +14,17 @@ class ProductsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
+
     {
 //        $products = json_decode(File::get(public_path('products.json'))) ?? [];
 //
 //        $products = collect($products)->sortByDesc('submitted');
 //
 //        $total = $products->sum('total');
-        
+
         return view('products.index');//compact('products', 'total')
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -32,17 +33,17 @@ class ProductsController extends Controller
     public function list()
     {
         $products = json_decode(File::get(public_path('products.json'))) ?? [];
-        
+
         $products = collect($products)->sortByDesc('submitted');
-        
+
         //dd($products);
-        
+
         $total = $products->sum('total');
-        
+
         return response()->json(['products' => $products, 'total' => $total]);
         //return view('products.create', compact('products', 'total'));
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -51,10 +52,10 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         //dd(request('number'));
         $products = json_decode(File::get(public_path('products.json'))) ?? [];
-        
+
         //if there is index, remove that product and add as new one
         if ($index = request('number')) {
             $products = collect($products)->forget($index);
@@ -70,21 +71,21 @@ class ProductsController extends Controller
         )
             //->sortByDesc('submitted');
         ;
-        
-        
+
+
         //dd($data);
-        
+
         $fileName = 'products.json';
         File::put(public_path($fileName), $data->toJson());
-        
+
         //$products = json_decode(File::get(public_path('products.json')))?? [];
         $products = $data->sortByDesc('submitted');
-        
+
         $total = $products->sum('total');
-        
+
         return response()->json(['products' => $products, 'total' => $total]);
     }
-    
+
     /**
      * Display the specified resource.
      *
@@ -95,7 +96,7 @@ class ProductsController extends Controller
     {
         //
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -106,7 +107,7 @@ class ProductsController extends Controller
     {
         //
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -118,7 +119,7 @@ class ProductsController extends Controller
     {
         //
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "73a0f3f6c02718b2e850158e03d6b165",
+    "content-hash": "42f572c9cd56ca5237700be8d2d6884b",
     "packages": [
         {
             "name": "chillerlan/php-qrcode",
@@ -12,21 +12,26 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/chillerlan/php-qrcode.git",
-                "reference": "4241b55f3841872704fc31eecc49b18ab5751f59"
+                "reference": "4df67223f4c92a2bfdfa9c0c8fd28ac4b6d8f40d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chillerlan/php-qrcode/zipball/4241b55f3841872704fc31eecc49b18ab5751f59",
-                "reference": "4241b55f3841872704fc31eecc49b18ab5751f59",
+                "url": "https://api.github.com/repos/chillerlan/php-qrcode/zipball/4df67223f4c92a2bfdfa9c0c8fd28ac4b6d8f40d",
+                "reference": "4df67223f4c92a2bfdfa9c0c8fd28ac4b6d8f40d",
                 "shasum": ""
             },
             "require": {
-                "chillerlan/php-traits": "^1.1",
-                "php": ">=7.0.3"
+                "chillerlan/php-settings-container": "^1.2",
+                "ext-gd": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": "^7.2"
             },
             "require-dev": {
-                "chillerlan/php-authenticator": "^2.0",
-                "phpunit/phpunit": "^6.5"
+                "phpunit/phpunit": "^8.4"
+            },
+            "suggest": {
+                "chillerlan/php-authenticator": "Yet another Google authenticator! Also creates URIs for mobile apps."
             },
             "type": "library",
             "extra": {
@@ -52,39 +57,48 @@
                     "name": "Smiley",
                     "email": "smiley@chillerlan.net",
                     "homepage": "https://github.com/codemasher"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/chillerlan/php-qrcode/graphs/contributors"
                 }
             ],
-            "description": "A QR code generator. PHP 7+",
+            "description": "A QR code generator. PHP 7.2+",
             "homepage": "https://github.com/chillerlan/php-qrcode",
             "keywords": [
-                "qr code"
+                "phpqrcode",
+                "qr",
+                "qr code",
+                "qrcode",
+                "qrcode-generator"
             ],
-            "time": "2018-06-20T22:53:20+00:00"
+            "time": "2019-12-04T21:37:35+00:00"
         },
         {
-            "name": "chillerlan/php-traits",
-            "version": "1.1.13",
+            "name": "chillerlan/php-settings-container",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/chillerlan/php-traits.git",
-                "reference": "264759946b6aaeb427346b749fc9639b790b8e7f"
+                "url": "https://github.com/chillerlan/php-settings-container.git",
+                "reference": "b9b0431dffd74102ee92348a63b4c33fc8ba639b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chillerlan/php-traits/zipball/264759946b6aaeb427346b749fc9639b790b8e7f",
-                "reference": "264759946b6aaeb427346b749fc9639b790b8e7f",
+                "url": "https://api.github.com/repos/chillerlan/php-settings-container/zipball/b9b0431dffd74102ee92348a63b4c33fc8ba639b",
+                "reference": "b9b0431dffd74102ee92348a63b4c33fc8ba639b",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.0.3"
+                "ext-json": "*",
+                "php": "^7.2"
             },
             "require-dev": {
-                "phpunit/phpunit": "^6.5"
+                "phpunit/phpunit": "^8.3"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "chillerlan\\Traits\\": "src/"
+                    "chillerlan\\Settings\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -98,16 +112,15 @@
                     "homepage": "https://github.com/codemasher"
                 }
             ],
-            "description": "Some useful traits for PHP 7+",
-            "homepage": "https://github.com/chillerlan/php-traits",
+            "description": "A container class for immutable settings objects. Not a DI container. PHP 7.2+",
+            "homepage": "https://github.com/chillerlan/php-settings-container",
             "keywords": [
                 "PHP7",
+                "Settings",
                 "container",
-                "dotenv",
-                "helper",
-                "trait"
+                "helper"
             ],
-            "time": "2018-06-22T00:30:47+00:00"
+            "time": "2019-09-10T00:09:44+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -269,12 +282,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/docusign/docusign-php-client.git",
-                "reference": "bf4c4afa000c141655c1001a0c96efdc28b211f9"
+                "reference": "4e7d192783f3a1996203c1a087806385bd6c513f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/docusign/docusign-php-client/zipball/bf4c4afa000c141655c1001a0c96efdc28b211f9",
-                "reference": "bf4c4afa000c141655c1001a0c96efdc28b211f9",
+                "url": "https://api.github.com/repos/docusign/docusign-php-client/zipball/4e7d192783f3a1996203c1a087806385bd6c513f",
+                "reference": "4e7d192783f3a1996203c1a087806385bd6c513f",
                 "shasum": ""
             },
             "require": {
@@ -1461,6 +1474,57 @@
             "time": "2018-01-20T00:28:24+00:00"
         },
         {
+            "name": "squizlabs/php_codesniffer",
+            "version": "3.5.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
+                "reference": "557a1fc7ac702c66b0bbfe16ab3d55839ef724cb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/557a1fc7ac702c66b0bbfe16ab3d55839ef724cb",
+                "reference": "557a1fc7ac702c66b0bbfe16ab3d55839ef724cb",
+                "shasum": ""
+            },
+            "require": {
+                "ext-simplexml": "*",
+                "ext-tokenizer": "*",
+                "ext-xmlwriter": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0"
+            },
+            "bin": [
+                "bin/phpcs",
+                "bin/phpcbf"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Greg Sherwood",
+                    "role": "lead"
+                }
+            ],
+            "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
+            "homepage": "https://github.com/squizlabs/PHP_CodeSniffer",
+            "keywords": [
+                "phpcs",
+                "standards"
+            ],
+            "time": "2019-12-04T04:46:47+00:00"
+        },
+        {
             "name": "swiftmailer/swiftmailer",
             "version": "v6.1.1",
             "source": {
@@ -2487,6 +2551,54 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "chillerlan/php-traits",
+            "version": "1.1.13",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chillerlan/php-traits.git",
+                "reference": "264759946b6aaeb427346b749fc9639b790b8e7f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/chillerlan/php-traits/zipball/264759946b6aaeb427346b749fc9639b790b8e7f",
+                "reference": "264759946b6aaeb427346b749fc9639b790b8e7f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "chillerlan\\Traits\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Smiley",
+                    "email": "smiley@chillerlan.net",
+                    "homepage": "https://github.com/codemasher"
+                }
+            ],
+            "description": "Some useful traits for PHP 7+",
+            "homepage": "https://github.com/chillerlan/php-traits",
+            "keywords": [
+                "PHP7",
+                "container",
+                "dotenv",
+                "helper",
+                "trait"
+            ],
+            "time": "2018-06-22T00:30:47+00:00"
+        },
         {
             "name": "doctrine/instantiator",
             "version": "1.1.0",
