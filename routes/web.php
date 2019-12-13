@@ -424,6 +424,7 @@ Route::get(
                 $username       = "muhamed.didovic@gmail.com";
                 $password       = "sanica000";
                 $integrator_key = "c5462989-febe-44f7-b6b7-c8fcdbcb0baa";
+                $envelop_summary = '';
 
                 // change to production (www.docusign.net) before going live
                 $host = "https://demo.docusign.net/restapi";
