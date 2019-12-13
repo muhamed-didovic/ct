@@ -1,6 +1,10 @@
 <?php
 
-use chillerlan\QRCode\{Output\QRImage, Output\QRMarkup, Output\QROutputAbstract, QRCode, QROptions};
+use chillerlan\QRCode\Output\QRImage;
+use chillerlan\QRCode\Output\QRMarkup;
+use chillerlan\QRCode\Output\QROutputAbstract;
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 
 class CO extends QRMarkup
 {
