@@ -483,10 +483,10 @@ Route::get(
                                 $options->setMergeRolesOnDraft(null);
 
                                 // create and send the envelope (aka signature request)
-                                $envelop_summary = $envelopeApi->createEnvelope($accountId, $envelop_definition, $options);
-                                if (!empty($envelop_summary)) {
-                                    echo "$envelop_summary";
-                                }
+//                                $envelop_summary = $envelopeApi->createEnvelope($accountId, $envelop_definition, $options);
+//                                if (!empty($envelop_summary)) {
+//                                    echo "$envelop_summary";
+//                                }
 
                                 $envelopeApi = new DocuSign\eSign\Api\EnvelopesApi($apiClient);
 
@@ -511,7 +511,7 @@ Route::get(
                                 $recipient_view_request->setAuthenticationMethod("email");
                                 $recipient_view_request->setUserName('user name neki');
                                 $recipient_view_request->setEmail('neki@mail.com');
-                                $signingView = $envelopeApi->createRecipientView($accountId, json_decode($envelop_summary)->envelopeId, $recipient_view_request);
+//                                $signingView = $envelopeApi->createRecipientView($accountId, json_decode($envelop_summary)->envelopeId, $recipient_view_request);
 
                             }
                         }
