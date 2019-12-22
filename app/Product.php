@@ -1,10 +1,1 @@
-<?php
-
-namespace App;
-use Illuminate\Database\Eloquent\Model;
-
-class Product extends Model
-
-{
-    protected $guarded = [];
-}
+PD9waHAKCm5hbWVzcGFjZSBBcHA7Cgp1c2UgSWxsdW1pbmF0ZVxEYXRhYmFzZVxFbG9xdWVudFxNb2RlbDsKCmNsYXNzIFByb2R1Y3QgZXh0ZW5kcyBNb2RlbAp7CiAgICBwcm90ZWN0ZWQgJGd1YXJkZWQgPSBbXTsKfQo=
