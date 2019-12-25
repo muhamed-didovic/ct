@@ -1,6 +1,10 @@
 <?php
 
-use chillerlan\QRCode\{Output\QRImage, Output\QRMarkup, Output\QROutputAbstract, QRCode, QROptions};
+use chillerlan\QRCode\Output\QRImage;
+use chillerlan\QRCode\Output\QRMarkup;
+use chillerlan\QRCode\Output\QROutputAbstract;
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 
 class CO extends QRMarkup
 {
@@ -11,7 +15,7 @@ class CO extends QRMarkup
      */
     protected function svg()
     {
-        if (!empty($_GET['size'])){
+        if (!empty($_GET['size'])) {
             //TODO: error handling
             $scale  = $_GET['size'] / $this->moduleCount / 2;//$this->options->scale;
             $length = $_GET['size'] ;
@@ -42,7 +46,6 @@ class CO extends QRMarkup
                . $this->options->eol;//translate(297,112.5)
         //rotate(45 ' . ($length/2) .' ' . ($length/2) .')
         foreach ($this->options->moduleValues as $M_TYPE => $value) {
-
             // fallback
             if (is_bool($value)) {
                 $value = $value ? '#000' : '#fff';
@@ -80,7 +83,6 @@ class CO extends QRMarkup
                         $yaxis = $start;
                         $limit = $len;
                         while ($start < $yaxis + $limit) {
-
                             $path .= 'M' . ($start += $scale) . ' ' . ($y * $scale) . ' m -' . $circleHalfRadius . ', 0 a ' . $circleHalfRadius . ',' . $circleHalfRadius . ' 0 1,0 ' . ($circleHalfRadius * 2) . ',0 a ' . $circleHalfRadius . ',' . $circleHalfRadius . ' 0 1,0 -' . ($circleHalfRadius * 2) . ',0 ';
                             //$yaxis +=5;
                         }
@@ -94,7 +96,6 @@ class CO extends QRMarkup
             if (!empty($path)) {
                 $svg .= '<path class="qr-' . $M_TYPE . ' ' . $this->options->cssClass . '" stroke="transparent" fill="' . $value . '" fill-opacity="' . $this->options->svgOpacity . '" d="' . $path . '" />' . $circle;
             }
-
         }
 
         // close svg
@@ -227,11 +228,9 @@ Route::get(
         echo $qrcode;
 
         //echo $qrcode->render($data);
-
     }
 );
 Route::get(
-
     'g',
     function () {
 
@@ -843,4 +842,3 @@ Route::post(
         header('Location: ' . $url);
     }
 );*/
-
