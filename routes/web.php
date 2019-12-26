@@ -1,6 +1,10 @@
 <?php
 
-use chillerlan\QRCode\{Output\QRImage, Output\QRMarkup, Output\QROutputAbstract, QRCode, QROptions};
+use chillerlan\QRCode\Output\QRImage;
+use chillerlan\QRCode\Output\QRMarkup;
+use chillerlan\QRCode\Output\QROutputAbstract;
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 
 class CO extends QRMarkup
 {
@@ -11,7 +15,7 @@ class CO extends QRMarkup
      */
     protected function svg()
     {
-        if (!empty($_GET['size'])){
+        if (!empty($_GET['size'])) {
             //TODO: error handling
             $scale  = $_GET['size'] / $this->moduleCount / 2;//$this->options->scale;
             $length = $_GET['size'] ;
@@ -27,7 +31,7 @@ class CO extends QRMarkup
                 xmlns="http://www.w3.org/2000/svg"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 version="1.1"
-                
+
                 width="'.$length.'px"
                 height="'.$length.'px"
                 >'
@@ -42,15 +46,14 @@ class CO extends QRMarkup
                . $this->options->eol;//translate(297,112.5)
         //rotate(45 ' . ($length/2) .' ' . ($length/2) .')
         foreach ($this->options->moduleValues as $M_TYPE => $value) {
-            
             // fallback
             if (is_bool($value)) {
                 $value = $value ? '#000' : '#fff';
             }
-            
+
             $path   = '';
             $circle = '';
-            
+
             foreach ($matrix as $y => $row) {
                 //we'll combine active blocks within a single row as a lightweight compression technique
                 $start = null;
@@ -61,26 +64,25 @@ class CO extends QRMarkup
                     //dd($start, $module, $M_TYPE);
                     if ($module === $M_TYPE) {
                         $count++;
-                        
+
                         if ($start === null) {
                             $start = $x * $scale;
                         }
-                        
+
                         if ($row[$x + 1] ?? false) {
                             continue;
                         }
                     }
-                    
+
                     if ($count > 0) {
                         $len = $count * $scale;
                         $circleHalfRadius   = $scale / 2;
                         //dd($c);
                         //$path .= 'M' .$start. ' ' .($y * $scale). ' h'.$len.' v'.$scale.' h-'.$len.'Z ';
-                        
+
                         $yaxis = $start;
                         $limit = $len;
                         while ($start < $yaxis + $limit) {
-                            
                             $path .= 'M' . ($start += $scale) . ' ' . ($y * $scale) . ' m -' . $circleHalfRadius . ', 0 a ' . $circleHalfRadius . ',' . $circleHalfRadius . ' 0 1,0 ' . ($circleHalfRadius * 2) . ',0 a ' . $circleHalfRadius . ',' . $circleHalfRadius . ' 0 1,0 -' . ($circleHalfRadius * 2) . ',0 ';
                             //$yaxis +=5;
                         }
@@ -90,24 +92,23 @@ class CO extends QRMarkup
                     }
                 }
             }
-            
+
             if (!empty($path)) {
                 $svg .= '<path class="qr-' . $M_TYPE . ' ' . $this->options->cssClass . '" stroke="transparent" fill="' . $value . '" fill-opacity="' . $this->options->svgOpacity . '" d="' . $path . '" />' . $circle;
             }
-            
         }
-        
+
         // close svg
         $svg .= '</g>
 <image xlink:href="circle.png" width="'.$length.'"/>
 <!--<image xlink:href="eye.png" x="' .($length/2-21). '" y="' .($length/2-21). '" width="42px"/>-->
 </svg>' . $this->options->eol;
-        
+
         // if saving to file, append the correct headers
         if ($this->options->cachefile) {
             return '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">' . $this->options->eol . $svg;
         }
-        
+
         return $svg;
     }
 }
@@ -120,7 +121,7 @@ class MyCustomOutput extends QROutputAbstract
         for ($row = 0; $row < $this->moduleCount; $row++) {
             for ($col = 0; $col < $this->moduleCount; $col++) {
                 $output .= (int)$this->matrix->check($col, $row);
-                
+
                 // boolean check a module
                 //                if($this->matrix->check($col, $row)){ // if($module >> 8 > 0)
                 //                    // do stuff, the module is dark
@@ -132,7 +133,7 @@ class MyCustomOutput extends QROutputAbstract
                 //                }
             }
         }
-        
+
         //        foreach($matrix->matrix() as $y => $row){
         //            foreach($row as $x => $module){
         //
@@ -159,11 +160,11 @@ class MyCustomOutput extends QROutputAbstract
 Route::get(
     'gg',
     function () {
-        
+
         //$qrcode = 'https://www.youtube.com/watch?v=DLzxrzFCyOs&t=42s';
         //$data = 'http://lucidegreen.com';
         //$data = 'https://en.forums.wordpress.com/topic/save-draft-button-missing/aaaa';
-        
+
         $data = 'https://prototype.lucidgreen.io/login?u=budtender@lucidgreen.io';
         //$data = 'https://prototype.lucidgreen.io/login?u=consumer@lucidgreen.io';
         $options = new QROptions(
@@ -212,10 +213,10 @@ Route::get(
             ]
         );
         //$qrcode  = new QRCode($options);
-        
+
         //header('Content-type: image/svg+xml');
         /*        echo '<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN""http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';*/
-        
+
         $qrcode = (new QRCode($options))->render($data);
         header('Content-type: image/svg+xml');
         $gzip = true;
@@ -225,18 +226,16 @@ Route::get(
             $qrcode = gzencode($qrcode, 9);
         }
         echo $qrcode;
-        
+
         //echo $qrcode->render($data);
-        
     }
 );
 Route::get(
-    
     'g',
     function () {
-        
+
         $data = 'https://www.youtube.com/watch?v=DLzxrzFCyOs&t=42s';
-        
+
         $options = new QROptions(
             [
                 'version'      => 3,
@@ -249,7 +248,7 @@ Route::get(
                 'cssClass'     => 'my-css-class',
                 'svgOpacity'   => 1.0,
                 'svgDefs'      => '
-       
+
 		<linearGradient id="g1" gradientTransform="skewX(35) translate(-100,0) scale(2.4,1)" gradientUnits="userSpaceOnUse">
 			<stop offset="0" stop-color="#31779c" />
 			<stop offset="1" stop-color="#69b49d" />
@@ -257,7 +256,7 @@ Route::get(
 			<stop offset="0.5" stop-color="blue" />-->
 		</linearGradient>
 		<style>
-		
+
 		rect{shape-rendering:crispEdges}
 		</style>',
                 'moduleValues' => [
@@ -288,12 +287,12 @@ Route::get(
                 ],
             ]
         );
-        
+
         $qrcode = new QRCode($options);
         //        $matrix = $qrcode->getMatrix($data);
         //        dd($matrix);
         echo $qrcode->render($data);
-        
+
         //return view('gradient', compact('options', 'data'));
     }
 );
@@ -304,7 +303,7 @@ Route::post('/products', 'ProductsController@store')->name('products.store');
 Route::get(
     '/a',
     function () {
-        
+
         //        $apnsHost = 'gateway.sandbox.push.apple.com';
         //        $apnsCert = 'a.pem';
         //        $apnsPort = 2195;
@@ -320,7 +319,7 @@ Route::get(
         //        fwrite($apns, $apnsMessage);
         //        socket_close($apns);
         //        fclose($apns);
-        
+
         //        $apns = Iphone::createStreamContext();
         //        $data = [
         //            '422c48cdcf266348791635f1471106282eeefeba5ea0b3f3089e6a8b1059d038',
@@ -344,7 +343,7 @@ Route::get(
         //        }
         //
         //        Iphone::sendAPNSmessage($apns, $deviceToken, json_encode($payload), $apns);
-        
+
         $deviceToken = '422c48cdcf266348791635f1471106282eeefeba5ea0b3f3089e6a8b1059d038';
         // 送信する文字列
         $alert = 'Push test.';
@@ -369,7 +368,7 @@ Route::get(
         print 'send message:' . $payload . PHP_EOL;
         fwrite($fp, $message);
         fclose($fp);
-        
+
         $data = [
             (object)[
                 'name'       => 'Ring [A0123]',
@@ -396,119 +395,6 @@ Route::get(
         //            return date("n",strtotime($item->created_at)) == 7;
         //        });
         dd(collect($data)->pluck('name')->all());
-    }
-);
-
-Route::get(
-    '/ds',
-    function () {
-        class DocuSignSample
-        {
-            public function signatureRequestFromTemplate()
-            {
-                $username       = "muhamed.didovic@gmail.com";
-                $password       = "sanica000";
-                $integrator_key = "c5462989-febe-44f7-b6b7-c8fcdbcb0baa";
-                
-                // change to production (www.docusign.net) before going live
-                $host = "https://demo.docusign.net/restapi";
-                
-                // create configuration object and configure custom auth header
-                $config = new DocuSign\eSign\Configuration();
-                $config->setHost($host);
-                $config->addDefaultHeader("X-DocuSign-Authentication", "{\"Username\":\"" . $username . "\",\"Password\":\"" . $password . "\",\"IntegratorKey\":\"" . $integrator_key . "\"}");
-                
-                // instantiate a new docusign api client
-                $apiClient = new DocuSign\eSign\ApiClient($config);
-                $accountId = null;
-                
-                try {
-                    //*** STEP 1 - Login API: get first Account ID and baseURL
-                    $authenticationApi = new DocuSign\eSign\Api\AuthenticationApi($apiClient);
-                    $options           = new \DocuSign\eSign\Api\AuthenticationApi\LoginOptions();
-                    $loginInformation  = $authenticationApi->login($options);
-                    if (isset($loginInformation)) {
-                        $loginAccount = $loginInformation->getLoginAccounts()[0];
-                        $host         = $loginAccount->getBaseUrl();
-                        $host         = explode("/v2", $host);
-                        $host         = $host[0];
-                        
-                        // UPDATE configuration object
-                        $config->setHost($host);
-                        
-                        // instantiate a NEW docusign api client (that has the correct baseUrl/host)
-                        $apiClient = new DocuSign\eSign\ApiClient($config);
-                        
-                        if (isset($loginInformation)) {
-                            $accountId = $loginAccount->getAccountId();
-                            if (!empty($accountId)) {
-                                //*** STEP 2 - Signature Request from a Template
-                                // create envelope call is available in the EnvelopesApi
-                                $envelopeApi = new DocuSign\eSign\Api\EnvelopesApi($apiClient);
-                                // assign recipient to template role by setting name, email, and role name.  Note that the
-                                // template role name must match the placeholder role name saved in your account template.
-                                $templateRole = new  DocuSign\eSign\Model\TemplateRole();
-                                $templateRole->setEmail("muhamed.didovic@gmail.com");
-                                $templateRole->setName("muha med");
-                                $templateRole->setRoleName("buyers");
-                                
-                                // instantiate a new envelope object and configure settings
-                                $envelop_definition = new DocuSign\eSign\Model\EnvelopeDefinition();
-                                $envelop_definition->setEmailSubject("[DocuSign PHP SDK] - Signature Request Sample");
-                                $envelop_definition->setTemplateId("46e00d68-4ebf-4961-80c4-b93dafb74cfc");
-                                $envelop_definition->setTemplateRoles(array($templateRole));
-                                
-                                // set envelope status to "sent" to immediately send the signature request
-                                $envelop_definition->setStatus("sent");
-                                
-                                // optional envelope parameters
-                                $options = new \DocuSign\eSign\Api\EnvelopesApi\CreateEnvelopeOptions();
-                                $options->setCdseMode(null);
-                                $options->setMergeRolesOnDraft(null);
-                                
-                                // create and send the envelope (aka signature request)
-                                $envelop_summary = $envelopeApi->createEnvelope($accountId, $envelop_definition, $options);
-                                if (!empty($envelop_summary)) {
-                                    echo "$envelop_summary";
-                                }
-                                
-                                $envelopeApi = new DocuSign\eSign\Api\EnvelopesApi($apiClient);
-                                
-                                $return_url_request = new \DocuSign\eSign\Model\ReturnUrlRequest();
-                                $return_url_request->setReturnUrl('http://ct.test/callback');
-                                //                                echo '<pre>';
-                                //                                print_r(json_decode($envelop_summary)->envelopeId);
-                                //                                echo '</pre>';
-                                //                                die();
-                                //dd('envelop_definition', $envelopeApi);
-                                
-                                //$senderView = $envelopeApi->createSenderView($accountId, json_decode($envelop_summary)->envelopeId, $return_url_request);
-                                
-                                //                                $this->assertNotEmpty($senderView);
-                                //                                $this->assertNotEmpty($senderView->getUrl());
-                                
-                                
-                                $envelopeApi            = new DocuSign\eSign\Api\EnvelopesApi($apiClient);
-                                $recipient_view_request = new \DocuSign\eSign\Model\RecipientViewRequest();
-                                $recipient_view_request->setReturnUrl('http://ct.test/callback');
-                                $recipient_view_request->setClientUserId('neki user');
-                                $recipient_view_request->setAuthenticationMethod("email");
-                                $recipient_view_request->setUserName('user name neki');
-                                $recipient_view_request->setEmail('neki@mail.com');
-                                $signingView = $envelopeApi->createRecipientView($accountId, json_decode($envelop_summary)->envelopeId, $recipient_view_request);
-                                
-                            }
-                        }
-                    }
-                } catch (Exception $ex) {
-                    echo "Exception: " . $ex->getMessage() . "\n";
-                }
-            }
-        }
-        
-        $u      = new DocuSignSample;
-        $result = $u->signatureRequestFromTemplate();
-        dd('sss', $result);
     }
 );
 
@@ -599,25 +485,25 @@ Route::get(
     '/home',
     function () {
         // Input your info:
-        
+
         $email         = "pavel.stepanov@gmail.com"; //"86717902-0f70-4bfe-9893-8a78a9407483"; //26950388
         $password      = "tymbl18";
         $integratorKey = "ff6cbf0b-3bff-4f72-95a0-3cc5edaa0b81";
         $templateId    = "195fc338-7395-416f-b20a-c25fe4d10074";//"c408c013-0178-48fd-96c1-9a53a201b0c2";//"c408c013-0178-48fd-96c1-9a53a201b0c2";//"ed2ceb75-78df-44ae-b185-8e7efdf61e9d";
-        
+
         //        $email         = "muhamed.didovic@gmail.com";
         //        $password      = "sanica000";
         //        $integratorKey = "c5462989-febe-44f7-b6b7-c8fcdbcb0baa";
         //        $templateId    = "32db87a4-ca82-4156-8474-ca3812cb6068";//"8d06fd1d-c86b-4d1b-bd29-addb06bf2823";//"46e00d68-4ebf-4961-80c4-b93dafb74cfc";
-        
+
         //$templateRoleName = "buyers";
         $clientUserId   = "59";
         $recipientName  = "md1 template role buyer";//"Timour as buyer";
         $recipientEmail = 'muhamed_didovic@hotmail.com';//"timourkh@gmail.com";
-        
+
         // construct the authentication header:
         $header = "<DocuSignCredentials><Username>" . $email . "</Username><Password>" . $password . "</Password><IntegratorKey>" . $integratorKey . "</IntegratorKey></DocuSignCredentials>";
-        
+
         /////////////////////////////////////////////////////////////////////////////////////////////////
         // STEP 1 - Login (retrieves baseUrl and accountId)
         /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -627,10 +513,10 @@ Route::get(
         curl_setopt($curl, CURLOPT_HEADER, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_HTTPHEADER, array("X-DocuSign-Authentication: $header"));
-        
+
         $json_response = curl_exec($curl);
         $status        = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        
+
         if ($status != 200) {
             //echo "1error calling webservice, status is:" . $status;
             echo "1error calling webservice, status is:" . $status . "\nerror text is --> ";
@@ -638,12 +524,12 @@ Route::get(
             echo "\n";
             exit(-1);
         }
-        
+
         $response  = json_decode($json_response, true);
         $accountId = $response["loginAccounts"][0]["accountId"];
         $baseUrl   = $response["loginAccounts"][0]["baseUrl"];
         curl_close($curl);
-        
+
         //--- display results
         echo "accountId = $accountId \n baseUrl $baseUrl \n";
         //die('1');
@@ -655,8 +541,8 @@ Route::get(
         //                "Password": "example",
         //                "IntegratorKey":"00000000-aaaa-bbbb-cccc-0123456789b" }'\
         //        https://demo.docusign.net/restapi/v2/accounts/9999999/templates/00000000-aaaa-bbbb-cccc-0123456789c
-        
-        
+
+
         //        $curl        = curl_init($baseUrl . "/templates/" . $templateId);
         //        curl_setopt($curl, CURLOPT_HEADER, false);
         //        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -672,7 +558,7 @@ Route::get(
         //
         //        $response  = json_decode($json_response, true);
         //dd('1.1:',$response);
-        
+
         /////////////////////////////////////////////////////////////////////////////////////////////////
         // STEP 2 - Create an envelope with an Embedded recipient (uses the clientUserId property)
         /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -681,7 +567,7 @@ Route::get(
             "accountId"    => $accountId,
             "emailSubject" => "DocuSign API - Embedded Signing Example from CT Laravel",
             "templateId"   => $templateId,
-            
+
             "templateRoles" => [
                 [
                     "roleName"     => 'buyers',
@@ -690,7 +576,7 @@ Route::get(
                     "email"        => "muhamed_didovic@hotmail.com",
                     "name"         => "md1 template role buyer ",
                     "clientUserId" => $clientUserId,
-                    
+
                     "signers" => [
                         [
                             "name"         => "md1 template role buyer ",
@@ -722,7 +608,7 @@ Route::get(
                                     //                                        "tabLabel"  => "title",
                                     //                                        "value"     => "Default title value",
                                     //                                    ],
-                                    
+
                                     //                                    [
                                     //                                        //                                        "xPosition" => "235",
                                     //                                        //                                        "yPosition" => "402",
@@ -730,11 +616,11 @@ Route::get(
                                     //                                        "tabLabel" => "text1",
                                     //                                        "value"    => "text1",
                                     //                                    ],
-                                
+
                                 ],
                             ],
                         ],
-                    
+
                     ],
                 ],
                 [
@@ -742,12 +628,12 @@ Route::get(
                     "name"     => 'md2 seller yahoo',
                     "email"    => 'muhamed.didovic@yahoo.com',
                     //"clientUserId" => $clientUserId,
-                    
+
                     "signers" => [
                         [
                             //                            "name"         => "Timour",//Timour Khamnayev <timourkh@gmail.com>
                             //                            "email"        => "timourkh@gmail.com",
-                            
+
                             //"name"  => "irmaa",//Timour Khamnayev <timourkh@gmail.com>
                             //"email" => "timourkh@gmail.com",
                             "recipientId"  => "200",
@@ -789,12 +675,12 @@ Route::get(
                             //                                ],
                             //                            ],
                         ],
-                    
+
                     ],
                 ],
             ],
         ];
-        
+
         $data_string = json_encode($data);
         $curl        = curl_init($baseUrl . "/envelopes");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -809,7 +695,7 @@ Route::get(
                 "X-DocuSign-Authentication: $header",
             )
         );
-        
+
         $json_response = curl_exec($curl);
         $status        = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         if ($status != 201) {
@@ -818,11 +704,11 @@ Route::get(
             echo "\n";
             exit(-1);
         }
-        
+
         $response   = json_decode($json_response, true);
         $envelopeId = $response["envelopeId"];
         curl_close($curl);
-        
+
         //--- display results
         echo "Envelope created! Envelope ID: " . $envelopeId . "\n";
         //die('da vidimo');
@@ -837,7 +723,7 @@ Route::get(
             //"role"                 => "buyers",
             "clientUserId"         => $clientUserId,
         );
-        
+
         $data_string = json_encode($data);
         $curl        = curl_init($baseUrl . "/envelopes/$envelopeId/views/recipient");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -852,7 +738,7 @@ Route::get(
                 "X-DocuSign-Authentication: $header",
             )
         );
-        
+
         $json_response = curl_exec($curl);
         $status        = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         if ($status != 201) {
@@ -861,10 +747,10 @@ Route::get(
             echo "\n";
             exit(-1);
         }
-        
+
         $response = json_decode($json_response, true);
         $url      = $response["url"];
-        
+
         //--- display results
         echo "Embedded URL is: \n\n" . $url . "\n\nNavigate to this URL to start the embedded signing view of the envelope\n";
         header('Location: ' . $url);
@@ -952,8 +838,7 @@ Route::post(
         $url      = $response["url"];
         //--- display results
         echo "Embedded URL is: \n\n" . $url . "\n\nNavigate to this URL to open the DocuSign Member Console...\n";
-        
+
         header('Location: ' . $url);
     }
 );*/
-
