@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use chillerlan\QRCode\{QRCode, QROptions};
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 
 class HomeController extends Controller
 {
